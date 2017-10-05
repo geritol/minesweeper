@@ -11,13 +11,23 @@ function render(board){
     })
     board.forEach(function(row, i) {
        row.forEach(function(cell, j){
-           fillCell(j, i, '#bdbdbd')
-           
-           if(cell.mine){
-               drawMine(j,i)
-           }
-           if(cell.nearbyMines){
-               drawNumber(j,i, cell.nearbyMines)
+           if(cell.shouldShow || cell.reveal){
+                if(!cell.reveal) fillCell(j, i, '#f0f0f0')
+                if(cell.mine){
+                    drawMine(j,i)
+                    return
+                }
+                if(cell.nearbyMines){
+                    drawNumber(j,i, cell.nearbyMines)
+                    return
+                }
+           }else{
+                if(cell.flag){
+                    drawFlag(j,i)
+                    return
+                }else{
+                    fillCell(j, i, '#bdbdbd')   
+                }
            }
        })
     });
@@ -67,4 +77,10 @@ function coordinatesToPixel(x,y){
     let xPx = cellSize * x + separatorLineThickness * (x + 1)
     let yPx = cellSize * y + separatorLineThickness * (y + 1)
     return [xPx, yPx]
+}
+
+function pixelToCoordinates(xPx, yPx){
+    let x = Math.floor(xPx/(cellSize + separatorLineThickness))
+    let y = Math.floor(yPx/(cellSize + separatorLineThickness))
+    return [x,y]
 }

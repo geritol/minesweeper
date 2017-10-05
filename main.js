@@ -11,7 +11,7 @@ let width = cellSize * columns + separatorLineThickness * (columns + 1)
 let height = cellSize * rows + separatorLineThickness * (rows + 1)
 
 canvas.height = height
-canvas.width = width 
+canvas.width = width
 
 function generateNewBoard(rows, columns, mines){
     let board = range(rows).map(function(){return range(columns).map(function(){return {}})})   
@@ -44,7 +44,7 @@ function calculateNearbyMines(rowIndex, columnIndex, board){
     getNearbyCells(rowIndex, columnIndex, board).forEach(function(cell){
         if(cell.mine) nearbyMinesCount += 1 
     })
-    
+
     cell.nearbyMines = nearbyMinesCount
     return cell
 }
@@ -80,5 +80,21 @@ function range(lower, upper){
     return Array.apply(null, Array(upper + Math.abs(lower))).map(function (_, j) {return j + lower;});
 }
 let board = generateNewBoard(rows, columns, 30)
-console.log(board)
+
+canvas.addEventListener('click', function(event){
+    let [x,y] = pixelToCoordinates(event.offsetX, event.offsetY)
+    board = move(x,y, board)
+    render(board)
+}.bind(window))
+
+canvas.addEventListener('contextmenu', function(event){
+    event.preventDefault()
+    let [x,y] = pixelToCoordinates(event.offsetX, event.offsetY)
+    let cell = board[y][x]
+    if(!cell.shouldShow && !cell.reveal){
+        cell.flag = !cell.flag
+    }
+    render(board)
+}.bind(window))
+
 render(board)
