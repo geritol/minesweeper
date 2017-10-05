@@ -26,11 +26,58 @@ function generateNewBoard(rows, columns, mines){
             board[y][x].mine = true
         }
     }
+    board.forEach(function(row, rowIndex){
+        row.map(function(cell, columnsIndex){
+            cell = calculateNearbyMines(rowIndex, columnsIndex, board)
+        })
+    })
     return board 
 }
 
-function range(i){
-    return Array.apply(null, Array(i)).map(function (_, j) {return j;});
+
+function calculateNearbyMines(rowIndex, columnIndex, board){
+    let cell = board[rowIndex][columnIndex]
+    if(cell.mine) return cell
+    
+    let nearbyMinesCount = 0
+
+    getNearbyCells(rowIndex, columnIndex, board).forEach(function(cell){
+        if(cell.mine) nearbyMinesCount += 1 
+    })
+    
+    cell.nearbyMines = nearbyMinesCount
+    return cell
+}
+
+function getNearbyCells(rowIndex, columnIndex, board){
+    let yDeltas = range(-1,2)
+    let xDeltas = range(-1,2)
+    let nearbyCells = []
+
+    yDeltas.forEach(function(yDelta){
+        xDeltas.forEach(function(xDelta){
+            // if we have the current cell, we don't want to go further
+            if(yDelta === 0 && xDelta === 0) return
+            let nearbyY = rowIndex + yDelta
+            let nearbyX = columnIndex + xDelta
+            if(nearbyX < 0 || nearbyY < 0) return 
+            if(nearbyY + 1 > board.length || nearbyX + 1 > board[0].length) return
+            let nearbyCell = board[nearbyY][nearbyX]
+            nearbyCell.xCoordinate = nearbyX
+            nearbyCell.yCoordinate = nearbyY
+            nearbyCells.push(nearbyCell)
+        })
+    })
+
+    return nearbyCells
+} 
+
+function range(lower, upper){
+    if(!upper){
+        upper = lower
+        lower = 0
+    }
+    return Array.apply(null, Array(upper + Math.abs(lower))).map(function (_, j) {return j + lower;});
 }
 let board = generateNewBoard(rows, columns, 30)
 console.log(board)

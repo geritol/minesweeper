@@ -12,6 +12,13 @@ function render(board){
     board.forEach(function(row, i) {
        row.forEach(function(cell, j){
            fillCell(j, i, '#bdbdbd')
+           
+           if(cell.mine){
+               drawMine(j,i)
+           }
+           if(cell.nearbyMines){
+               drawNumber(j,i, cell.nearbyMines)
+           }
        })
     });
 }
