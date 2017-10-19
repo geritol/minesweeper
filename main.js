@@ -10,6 +10,7 @@ const config = {
   mineCount: 30,
   separatorLineThickness: 2
 }
+
 function calculateBoardSize(dimension, {cellSize, separatorLineThickness}){
     // calculates the height or width in px of the board
     // dimension row or column count of the board
