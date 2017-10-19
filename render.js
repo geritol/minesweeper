@@ -1,14 +1,19 @@
-function render(board){
+function render(board, {cellSize, separatorLineThickness, width, height}){
+    let rows = board.length
+    let columns = board[0].length
+    // draw row separators
     range(rows + 1).map(function(i){
         let nextStartingYCoordinate = cellSize * i + separatorLineThickness * i
         context.fillStyle = '#808080'
         context.fillRect(0,nextStartingYCoordinate, width, separatorLineThickness)
     })
+    // draw column separators
     range(columns + 1).map(function(i){
         let nextStartingXCoordinate = cellSize * i + separatorLineThickness * i
-        context.fillStyle = '#808080'        
+        context.fillStyle = '#808080'
         context.fillRect(nextStartingXCoordinate, 0, separatorLineThickness, height)
     })
+    // draw cells
     board.forEach(function(row, i) {
        row.forEach(function(cell, j){
            if(cell.shouldShow || cell.reveal){
@@ -26,33 +31,33 @@ function render(board){
                     drawFlag(j,i)
                     return
                 }else{
-                    fillCell(j, i, '#bdbdbd')   
+                    fillCell(j, i, '#bdbdbd')
                 }
            }
        })
     });
 }
 
-function drawMine(x,y){
+function drawMine(x,y, {cellSize}){
     let mineImage = document.getElementById('mine')
-    fillCell(x,y, 'red')   
+    fillCell(x,y, 'red')
     let [xPx, yPx] = coordinatesToPixel(x,y)
     context.drawImage(mineImage,xPx,yPx, cellSize, cellSize);
 }
 
-function drawFlag(x,y){
+function drawFlag(x,y, {cellSize}){
     let flagImage = document.getElementById('flag')
     let [xPx, yPx] = coordinatesToPixel(x,y)
     context.drawImage(flagImage,xPx,yPx, cellSize, cellSize);
 }
 
-function fillCell(x,y, color){
+function fillCell(x,y, color, {cellSize}){
     let [xPx, yPx] = coordinatesToPixel(x,y)
-    context.fillStyle = color;     
+    context.fillStyle = color;
     context.fillRect(xPx, yPx, cellSize, cellSize)
 }
 
-function drawNumber(x,y, num){
+function drawNumber(x,y, num, {cellSize, separatorLineThickness}){
     let [xPx, yPx] = coordinatesToPixel(x,y)
 
     context.font= cellSize +"px monospace";
@@ -66,10 +71,10 @@ function drawNumber(x,y, num){
         7: '#000000',
         8: '#808080'
     }
-    context.fillStyle= colors[num];    
-    
+    context.fillStyle= colors[num];
+
     let textWidth = context.measureText(num).width
-    
+
     context.fillText(num , xPx + cellSize/2 - (textWidth / 2), yPx + cellSize/6*5 );
 }
 
