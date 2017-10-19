@@ -3,21 +3,34 @@
 const canvas = document.querySelector('canvas')
 const context = canvas.getContext('2d')
 
-let rows = 10
-let columns = 20
-const cellSize = 30
-const separatorLineThickness = 2
-let width = cellSize * columns + separatorLineThickness * (columns + 1)
-let height = cellSize * rows + separatorLineThickness * (rows + 1)
+const config = {
+  rows: 6,
+  columns: 6,
+  cellSize: 30,
+  mineCount: 30,
+  separatorLineThickness: 2
+}
 
-canvas.height = height
-canvas.width = width
+function calculateBoardSize(dimension, {cellSize, separatorLineThickness}){
+    // calculates the height or width in px of the board
+    // dimension row or column count of the board
+    return cellSize * dimension + separatorLineThickness * (dimension + 1)
+}
+config.width = calculateBoardSize(config.columns, config)
+config.height = calculateBoardSize(config.rows, config)
+
+canvas.height = config.height
+canvas.width = config.width
 
 function generateNewBoard(rows, columns, mines){
-    let board = range(rows).map(function(){return range(columns).map(function(){return {}})})   
+    let board = range(rows).map(function(){return range(columns).map(function(){return {}})})
     let mineCoordinates = []
     let mineCoordinatesIndex = {}
     while(mineCoordinates.length < mines){
+        const cellCount = rows * columns
+        if(mineCoordinates.length === cellCount){
+          throw new Error('More mines specified than cells!')
+        }
         let x = Math.floor(Math.random() * columns)
         let y = Math.floor(Math.random() * rows)
         if(!mineCoordinatesIndex[String([x,y])]){
@@ -31,18 +44,18 @@ function generateNewBoard(rows, columns, mines){
             cell = calculateNearbyMines(rowIndex, columnsIndex, board)
         })
     })
-    return board 
+    return board
 }
 
 
 function calculateNearbyMines(rowIndex, columnIndex, board){
     let cell = board[rowIndex][columnIndex]
     if(cell.mine) return cell
-    
+
     let nearbyMinesCount = 0
 
     getNearbyCells(rowIndex, columnIndex, board).forEach(function(cell){
-        if(cell.mine) nearbyMinesCount += 1 
+        if(cell.mine) nearbyMinesCount += 1
     })
 
     cell.nearbyMines = nearbyMinesCount
@@ -60,7 +73,7 @@ function getNearbyCells(rowIndex, columnIndex, board){
             if(yDelta === 0 && xDelta === 0) return
             let nearbyY = rowIndex + yDelta
             let nearbyX = columnIndex + xDelta
-            if(nearbyX < 0 || nearbyY < 0) return 
+            if(nearbyX < 0 || nearbyY < 0) return
             if(nearbyY + 1 > board.length || nearbyX + 1 > board[0].length) return
             let nearbyCell = board[nearbyY][nearbyX]
             nearbyCell.xCoordinate = nearbyX
@@ -70,7 +83,7 @@ function getNearbyCells(rowIndex, columnIndex, board){
     })
 
     return nearbyCells
-} 
+}
 
 function range(lower, upper){
     if(!upper){
@@ -79,22 +92,23 @@ function range(lower, upper){
     }
     return Array.apply(null, Array(upper + Math.abs(lower))).map(function (_, j) {return j + lower;});
 }
-let board = generateNewBoard(rows, columns, 30)
+let board = generateNewBoard(config.rows, config.columns, config.mineCount)
+console.log(board)
 
 canvas.addEventListener('click', function(event){
-    let [x,y] = pixelToCoordinates(event.offsetX, event.offsetY)
+    let [x,y] = pixelToCoordinates(event.offsetX, event.offsetY, config)
     board = move(x,y, board)
-    render(board)
+    render(board, config)
 }.bind(window))
 
 canvas.addEventListener('contextmenu', function(event){
     event.preventDefault()
-    let [x,y] = pixelToCoordinates(event.offsetX, event.offsetY)
+    let [x,y] = pixelToCoordinates(event.offsetX, event.offsetY, config)
     let cell = board[y][x]
     if(!cell.shouldShow && !cell.reveal){
         cell.flag = !cell.flag
     }
-    render(board)
+    render(board, config)
 }.bind(window))
 
-render(board)
+render(board, config)
