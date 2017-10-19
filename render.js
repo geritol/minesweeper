@@ -1,6 +1,7 @@
 function render(board, {cellSize, separatorLineThickness, width, height}){
     let rows = board.length
     let columns = board[0].length
+    let options = arguments[1]
     // draw row separators
     range(rows + 1).map(function(i){
         let nextStartingYCoordinate = cellSize * i + separatorLineThickness * i
@@ -17,48 +18,52 @@ function render(board, {cellSize, separatorLineThickness, width, height}){
     board.forEach(function(row, i) {
        row.forEach(function(cell, j){
            if(cell.shouldShow || cell.reveal){
-                if(!cell.reveal) fillCell(j, i, '#f0f0f0')
+                if(!cell.reveal) fillCell(j, i, '#f0f0f0', options)
                 if(cell.mine){
-                    drawMine(j,i)
+                    drawMine(j,i, options)
                     return
                 }
                 if(cell.nearbyMines){
-                    drawNumber(j,i, cell.nearbyMines)
+                    drawNumber(j,i, cell.nearbyMines, options)
                     return
                 }
            }else{
                 if(cell.flag){
-                    drawFlag(j,i)
+                    drawFlag(j,i, options)
                     return
                 }else{
-                    fillCell(j, i, '#bdbdbd')
+                    fillCell(j, i, '#bdbdbd', options)
                 }
            }
        })
     });
 }
 
-function drawMine(x,y, {cellSize}){
+function drawMine(x,y, {cellSize, separatorLineThickness}){
     let mineImage = document.getElementById('mine')
-    fillCell(x,y, 'red')
-    let [xPx, yPx] = coordinatesToPixel(x,y)
+    let options = arguments[2]
+    fillCell(x,y, 'red', options)
+    let [xPx, yPx] = coordinatesToPixel(x,y, options)
     context.drawImage(mineImage,xPx,yPx, cellSize, cellSize);
 }
 
-function drawFlag(x,y, {cellSize}){
+function drawFlag(x,y, {cellSize, separatorLineThickness}){
     let flagImage = document.getElementById('flag')
-    let [xPx, yPx] = coordinatesToPixel(x,y)
+    let options = arguments[2]
+    let [xPx, yPx] = coordinatesToPixel(x,y, options)
     context.drawImage(flagImage,xPx,yPx, cellSize, cellSize);
 }
 
-function fillCell(x,y, color, {cellSize}){
-    let [xPx, yPx] = coordinatesToPixel(x,y)
+function fillCell(x,y, color, {cellSize, separatorLineThickness}){
+    let options = arguments[3]
+    let [xPx, yPx] = coordinatesToPixel(x,y, options)
     context.fillStyle = color;
     context.fillRect(xPx, yPx, cellSize, cellSize)
 }
 
 function drawNumber(x,y, num, {cellSize, separatorLineThickness}){
-    let [xPx, yPx] = coordinatesToPixel(x,y)
+    let options = arguments[3]
+    let [xPx, yPx] = coordinatesToPixel(x,y, options)
 
     context.font= cellSize +"px monospace";
     const colors = {
@@ -78,13 +83,13 @@ function drawNumber(x,y, num, {cellSize, separatorLineThickness}){
     context.fillText(num , xPx + cellSize/2 - (textWidth / 2), yPx + cellSize/6*5 );
 }
 
-function coordinatesToPixel(x,y){
+function coordinatesToPixel(x,y, {cellSize, separatorLineThickness}){
     let xPx = cellSize * x + separatorLineThickness * (x + 1)
     let yPx = cellSize * y + separatorLineThickness * (y + 1)
     return [xPx, yPx]
 }
 
-function pixelToCoordinates(xPx, yPx){
+function pixelToCoordinates(xPx, yPx, {cellSize, separatorLineThickness}){
     let x = Math.floor(xPx/(cellSize + separatorLineThickness))
     let y = Math.floor(yPx/(cellSize + separatorLineThickness))
     return [x,y]

@@ -5,7 +5,7 @@ const context = canvas.getContext('2d')
 
 const config = {
   rows: 6,
-  columns: 4,
+  columns: 6,
   cellSize: 30,
   mineCount: 30,
   separatorLineThickness: 2
@@ -95,19 +95,19 @@ let board = generateNewBoard(config.rows, config.columns, config.mineCount)
 console.log(board)
 
 canvas.addEventListener('click', function(event){
-    let [x,y] = pixelToCoordinates(event.offsetX, event.offsetY)
+    let [x,y] = pixelToCoordinates(event.offsetX, event.offsetY, config)
     board = move(x,y, board)
-    render(board)
+    render(board, config)
 }.bind(window))
 
 canvas.addEventListener('contextmenu', function(event){
     event.preventDefault()
-    let [x,y] = pixelToCoordinates(event.offsetX, event.offsetY)
+    let [x,y] = pixelToCoordinates(event.offsetX, event.offsetY, config)
     let cell = board[y][x]
     if(!cell.shouldShow && !cell.reveal){
         cell.flag = !cell.flag
     }
-    render(board)
+    render(board, config)
 }.bind(window))
 
 render(board, config)
