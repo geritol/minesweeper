@@ -4,14 +4,8 @@ chai.should()
 
 const testFunctions = [testGenerateNewBoard]
 
-// tests for generate new board
+// test boundle, testing generate new board
 function testGenerateNewBoard(){
-  let testFunctions = [emptyBoard, moreMinesThanFieds, someBoard]
-  let res = {
-    message: 'Test for generateNewBoard()',
-    passCount: 0,
-    totalCount: 0
-  }
   function emptyBoard(){
     let board = generateNewBoard(0, 0, 0)
     board.should.be.an('array').that.is.empty
@@ -35,21 +29,29 @@ function testGenerateNewBoard(){
       })
     })
   }
+  return runTests([emptyBoard, moreMinesThanFieds, someBoard])
+}
 
-  (function run(){
-    testFunctions.forEach((fn)=>{
-      res.totalCount += 1
-      try{
-        fn()
-        res.passCount += 1
-      }catch(err){
-        if(showDetails) console.log(err)
-      }
-    })
-  })()
+// takes care of running the tests of test bundles
+function runTests(testList){
+  let res = {
+    message: 'Test for generateNewBoard()',
+    passCount: 0,
+    totalCount: 0
+  }
+  testList.forEach((fn)=>{
+    res.totalCount += 1
+    try{
+      fn()
+      res.passCount += 1
+    }catch(err){
+      if(showDetails) console.log(err)
+    }
+  })
   return res
 }
 
+// runs the test bundles
 (function testRunner(){
   testFunctions.forEach((fn) => {
     colors = {
