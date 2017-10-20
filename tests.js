@@ -1,8 +1,9 @@
 var showDetails = true
 
 chai.should()
+var expect = chai.expect;
 
-const testFunctions = [testGenerateNewBoard]
+const testFunctions = [testGenerateNewBoard, testCalculateNearbyMindes]
 
 // test boundle, testing generate new board
 function testGenerateNewBoard(){
@@ -29,13 +30,43 @@ function testGenerateNewBoard(){
       })
     })
   }
-  return runTests([emptyBoard, moreMinesThanFieds, someBoard])
+  return runTests('generateNewBoard()', [emptyBoard, moreMinesThanFieds, someBoard])
+}
+
+// test boundle, test calculateNearbyMines
+function testCalculateNearbyMindes(){
+  function noNearby(){
+    const board = [[{}]]
+    const cell = calculateNearbyMines(0, 0, board)
+    cell.should.be.an('object')
+    expect(cell).to.have.property('nearbyMines')
+    expect(cell.nearbyMines).to.be.a('number').and.to.be.equal(0)
+  }
+  function allNearby(){
+    const board = [[{mine: true},{mine: true},{mine: true}],
+    [{mine: true},{},{mine: true}],
+    [{mine: true},{mine: true},{mine: true}]]
+    const cell = calculateNearbyMines(1, 1, board)
+    cell.should.be.an('object')
+    expect(cell).to.have.property('nearbyMines')
+    expect(cell.nearbyMines).to.be.a('number').and.to.be.equal(8)
+  }
+  function testCorner(){
+    const board = [[{mine: true},{},{}],
+    [{mine: true},{mine: true},{}],
+    [{mine: true},{mine: true},{mine: true}]]
+    const cell = calculateNearbyMines(0, 2, board)
+    cell.should.be.an('object')
+    expect(cell).to.have.property('nearbyMines')
+    expect(cell.nearbyMines).to.be.a('number').and.to.be.equal(1)
+  }
+  return runTests('calculateNearbyMines()', [noNearby, allNearby, testCorner])
 }
 
 // takes care of running the tests of test bundles
-function runTests(testList){
+function runTests(testName, testList){
   let res = {
-    message: 'Test for generateNewBoard()',
+    message: `Test for ${testName}`,
     passCount: 0,
     totalCount: 0
   }
