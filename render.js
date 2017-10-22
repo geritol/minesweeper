@@ -1,3 +1,9 @@
+const defaultTileColor = '#808080'
+const emptyTileColor = '#f0f0f0'
+const mineImage = document.getElementById('mine')
+const flagImage = document.getElementById('flag')
+
+
 function render(board, {cellSize, separatorLineThickness, width, height}){
     let rows = board.length
     let columns = board[0].length
@@ -5,42 +11,31 @@ function render(board, {cellSize, separatorLineThickness, width, height}){
     // draw row separators
     range(rows + 1).map(function(i){
         let nextStartingYCoordinate = cellSize * i + separatorLineThickness * i
-        context.fillStyle = '#808080'
+        context.fillStyle = defaultTileColor
         context.fillRect(0,nextStartingYCoordinate, width, separatorLineThickness)
     })
     // draw column separators
     range(columns + 1).map(function(i){
         let nextStartingXCoordinate = cellSize * i + separatorLineThickness * i
-        context.fillStyle = '#808080'
+        context.fillStyle = defaultTileColor
         context.fillRect(nextStartingXCoordinate, 0, separatorLineThickness, height)
     })
     // draw cells
     board.forEach(function(row, i) {
        row.forEach(function(cell, j){
            if(cell.shouldShow || cell.reveal){
-                if(!cell.reveal) fillCell(j, i, '#f0f0f0', options)
-                if(cell.mine){
-                    drawMine(j,i, options)
-                    return
-                }
-                if(cell.nearbyMines){
-                    drawNumber(j,i, cell.nearbyMines, options)
-                    return
-                }
-           }else{
-                if(cell.flag){
-                    drawFlag(j,i, options)
-                    return
-                }else{
-                    fillCell(j, i, '#bdbdbd', options)
-                }
+                if( !cell.reveal ) fillCell(j, i, emptyTileColor, options)
+                if( cell.mine ) drawMine(j,i, options)
+                if( cell.nearbyMines ) drawNumber(j,i, cell.nearbyMines, options)
+           } else {
+                if( cell.flag ) drawFlag(j,i, options)
+                else fillCell(j, i, '#bdbdbd', options)
            }
        })
     });
 }
 
 function drawMine(x,y, {cellSize, separatorLineThickness}){
-    let mineImage = document.getElementById('mine')
     let options = arguments[2]
     fillCell(x,y, 'red', options)
     let [xPx, yPx] = coordinatesToPixel(x,y, options)
@@ -48,7 +43,6 @@ function drawMine(x,y, {cellSize, separatorLineThickness}){
 }
 
 function drawFlag(x,y, {cellSize, separatorLineThickness}){
-    let flagImage = document.getElementById('flag')
     let options = arguments[2]
     let [xPx, yPx] = coordinatesToPixel(x,y, options)
     context.drawImage(flagImage,xPx,yPx, cellSize, cellSize);
