@@ -1,3 +1,5 @@
+'use strict'
+
 var showDetails = true
 
 chai.should()
@@ -43,18 +45,22 @@ function testCalculateNearbyMindes(){
     expect(cell.nearbyMines).to.be.a('number').and.to.be.equal(0)
   }
   function allNearby(){
-    const board = [[{mine: true},{mine: true},{mine: true}],
-    [{mine: true},{},{mine: true}],
-    [{mine: true},{mine: true},{mine: true}]]
+    const board = [
+      [{mine: true},{mine: true},{mine: true}],
+      [{mine: true},{},{mine: true}],
+      [{mine: true},{mine: true},{mine: true}]
+    ]
     const cell = calculateNearbyMines(1, 1, board)
     cell.should.be.an('object')
     expect(cell).to.have.property('nearbyMines')
     expect(cell.nearbyMines).to.be.a('number').and.to.be.equal(8)
   }
   function testCorner(){
-    const board = [[{mine: true},{},{}],
-    [{mine: true},{mine: true},{}],
-    [{mine: true},{mine: true},{mine: true}]]
+    const board = [
+      [{mine: true},{},{}],
+      [{mine: true},{mine: true},{}],
+      [{mine: true},{mine: true},{mine: true}]
+    ]
     const cell = calculateNearbyMines(0, 2, board)
     cell.should.be.an('object')
     expect(cell).to.have.property('nearbyMines')
@@ -70,13 +76,13 @@ function runTests(testName, testList){
     passCount: 0,
     totalCount: 0
   }
-  testList.forEach((fn)=>{
+  testList.forEach((fn) => {
     res.totalCount += 1
-    try{
+    try {
       fn()
       res.passCount += 1
-    }catch(err){
-      if(showDetails) console.log(err)
+    } catch(err) {
+      if(showDetails) console.error(err)
     }
   })
   return res

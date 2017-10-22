@@ -11,16 +11,17 @@ const config = {
   separatorLineThickness: 2
 }
 
-function calculateBoardSize(dimension, {cellSize, separatorLineThickness}){
-    // calculates the height or width in px of the board
-    // dimension row or column count of the board
-    return cellSize * dimension + separatorLineThickness * (dimension + 1)
-}
 config.width = calculateBoardSize(config.columns, config)
 config.height = calculateBoardSize(config.rows, config)
 
 canvas.height = config.height
 canvas.width = config.width
+
+function calculateBoardSize(dimension, {cellSize, separatorLineThickness}){
+    // calculates the height or width in px of the board
+    // dimension row or column count of the board
+    return cellSize * dimension + separatorLineThickness * (dimension + 1)
+}
 
 function generateNewBoard(rows, columns, mines){
     let board = range(rows).map(function(){return range(columns).map(function(){return {}})})
@@ -51,20 +52,17 @@ function generateNewBoard(rows, columns, mines){
 function calculateNearbyMines(rowIndex, columnIndex, board){
     let cell = board[rowIndex][columnIndex]
     if(cell.mine) return cell
-
     let nearbyMinesCount = 0
-
     getNearbyCells(rowIndex, columnIndex, board).forEach(function(cell){
         if(cell.mine) nearbyMinesCount += 1
     })
-
     cell.nearbyMines = nearbyMinesCount
     return cell
 }
 
 function getNearbyCells(rowIndex, columnIndex, board){
-    let yDeltas = range(-1,2)
-    let xDeltas = range(-1,2)
+    let yDeltas = range(-1, 2)
+    let xDeltas = range(-1, 2)
     let nearbyCells = []
 
     yDeltas.forEach(function(yDelta){
@@ -81,7 +79,6 @@ function getNearbyCells(rowIndex, columnIndex, board){
             nearbyCells.push(nearbyCell)
         })
     })
-
     return nearbyCells
 }
 
@@ -92,23 +89,24 @@ function range(lower, upper){
     }
     return Array.apply(null, Array(upper + Math.abs(lower))).map(function (_, j) {return j + lower;});
 }
-let board = generateNewBoard(config.rows, config.columns, config.mineCount)
-console.log(board)
 
-canvas.addEventListener('click', function(event){
+function leftClickEvent(event){
     let [x,y] = pixelToCoordinates(event.offsetX, event.offsetY, config)
     board = move(x,y, board)
     render(board, config)
-}.bind(window))
+}.bind(window)
 
-canvas.addEventListener('contextmenu', function(event){
+function rightClickEvent(event){
     event.preventDefault()
     let [x,y] = pixelToCoordinates(event.offsetX, event.offsetY, config)
     let cell = board[y][x]
-    if(!cell.shouldShow && !cell.reveal){
-        cell.flag = !cell.flag
-    }
+    if(!cell.shouldShow && !cell.reveal) cell.flag = !cell.flag
     render(board, config)
-}.bind(window))
+}.bind(window)
 
+// init
+
+let board = generateNewBoard(config.rows, config.columns, config.mineCount)
+canvas.addEventListener('click', clickEvent)
+canvas.addEventListener('contextmenu', rightClickEvent)
 render(board, config)
