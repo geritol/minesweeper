@@ -1,3 +1,5 @@
+'use strict'
+
 const defaultTileColor = '#808080'
 const emptyTileColor = '#f0f0f0'
 const mineImage = document.getElementById('mine')
