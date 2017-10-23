@@ -3,7 +3,7 @@ var showDetails = true
 chai.should()
 var expect = chai.expect;
 
-const testFunctions = [testGenerateNewBoard, testCalculateNearbyMindes]
+const testFunctions = [testGenerateNewBoard, testCalculateNearbyMines]
 
 // test boundle, testing generate new board
 function testGenerateNewBoard(){
@@ -27,6 +27,8 @@ function testGenerateNewBoard(){
       row.should.have.lengthOf(10)
       row.forEach((cell)=>{
         cell.should.not.be.empty
+        expect(cell).to.have.own.property('mine')
+        expect(cell.mine).to.be.true
       })
     })
   }
@@ -34,7 +36,7 @@ function testGenerateNewBoard(){
 }
 
 // test boundle, test calculateNearbyMines
-function testCalculateNearbyMindes(){
+function testCalculateNearbyMines(){
   function noNearby(){
     const board = [[{}]]
     const cell = calculateNearbyMines(0, 0, board)
