@@ -1,6 +1,9 @@
 'use strict'
 
 /*
+  Let's Code BP! - Minesweeper Workshop
+
+  You will need to code in this file, test results are displayed in the console.
 
   Board: 2d Array containing cells
   Example:
@@ -9,7 +12,7 @@
   [{"nearbyMines":0},{"nearbyMines":2},{"mine":true}],
   [{"nearbyMines":0},{"nearbyMines":2},{"mine":true}]
   ]
-  ------------
+
   Cell: object
   Properties:
     nearbyMines: Integer (0-8)
