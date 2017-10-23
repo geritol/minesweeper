@@ -1,6 +1,6 @@
 function move(x,y, board){
     let cell = board[y][x]
-    
+
     // no ations are needed
     if(cell.flag || cell.shouldShow || cell.reveal) return board
 
@@ -8,6 +8,7 @@ function move(x,y, board){
     if(cell.mine){
       cell.shouldShow = true
       revealAll(board)
+      return board
     }
 
     // show nearby
