@@ -22,15 +22,15 @@ config.height = calculateBoardSize(config.rows, config)
 canvas.height = config.height
 canvas.width = config.width
 
-function generateNewBoard(rows, columns, mines){
+function generateNewBoard(rows, columns, mineCountToGenerate){
+    const cellCount = rows * columns
+    if(mineCountToGenerate > cellCount){
+      throw new Error('More mines specified than cells!')
+    }
     let board = range(rows).map(function(){return range(columns).map(function(){return {}})})
     let mineCoordinates = []
     let mineCoordinatesIndex = {}
-    while(mineCoordinates.length < mines){
-        const cellCount = rows * columns
-        if(mineCoordinates.length === cellCount){
-          throw new Error('More mines specified than cells!')
-        }
+    while(mineCoordinates.length < mineCountToGenerate){
         let x = Math.floor(Math.random() * columns)
         let y = Math.floor(Math.random() * rows)
         if(!mineCoordinatesIndex[String([x,y])]){
