@@ -1,6 +1,9 @@
 function move(x,y, board){
     let cell = board[y][x]
+    
+    // no ations are needed
     if(cell.flag || cell.shouldShow || cell.reveal) return board
+
     // lost game
     if(cell.mine){
       cell.shouldShow = true
