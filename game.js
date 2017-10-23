@@ -1,26 +1,48 @@
 function generateNewBoard(rows, columns, mineCountToGenerate){
-    const cellCount = rows * columns
-    if(mineCountToGenerate > cellCount){
-      throw new Error('More mines specified than cells!')
-    }
+    /*
+      rowCount (integer), columnCount (integer), mineCountToGenerate (integer)
+      -> board (2d array), contains cells (object) {mine: Boolean, Integer}
+      Crerates a board, fills it with mines, and calculates nearby mine counts for cells
+    */
+
+    // create empty board
     let board = range(rows).map(function(){return range(columns).map(function(){return {}})})
-    let mineCoordinates = []
-    let mineCoordinatesIndex = {}
-    while(mineCoordinates.length < mineCountToGenerate){
-        let x = Math.floor(Math.random() * columns)
-        let y = Math.floor(Math.random() * rows)
-        if(!mineCoordinatesIndex[String([x,y])]){
-            mineCoordinatesIndex[String([x,y])] = 1
-            mineCoordinates.push([x,y])
-            board[y][x].mine = true
-        }
-    }
+
+    // add mines to the board
+    // use generateMineCoordinates function
+    const mineCoordinates = generateMineCoordinates(rows, columns, mineCountToGenerate)
+
+    mineCoordinates.forEach(function(coordinatePair){
+      const [x, y] = coordinatePair
+      board[x][y] = {mine: true}
+    })
+
+    // calculate nearby mine counts
+    // use calculateNearbyMines function
     board.forEach(function(row, rowIndex){
         row.map(function(cell, columnsIndex){
             cell = calculateNearbyMines(rowIndex, columnsIndex, board)
         })
     })
     return board
+}
+
+function generateMineCoordinates(columns, rows, mineCountToGenerate){
+  const cellCount = rows * columns
+  if(mineCountToGenerate > cellCount){
+    throw new Error('More mines specified than cells!')
+  }
+  let mineCoordinates = []
+  let mineCoordinatesIndex = {}
+  while(mineCoordinates.length < mineCountToGenerate){
+      let x = Math.floor(Math.random() * columns)
+      let y = Math.floor(Math.random() * rows)
+      if(!mineCoordinatesIndex[String([x,y])]){
+          mineCoordinatesIndex[String([x,y])] = 1
+          mineCoordinates.push([x,y])
+      }
+  }
+  return mineCoordinates
 }
 
 function calculateNearbyMines(rowIndex, columnIndex, board){
