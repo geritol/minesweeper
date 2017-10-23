@@ -16,11 +16,9 @@ function calculateBoardSize(dimension, {cellSize, separatorLineThickness}){
     // dimension row or column count of the board
     return cellSize * dimension + separatorLineThickness * (dimension + 1)
 }
-config.width = calculateBoardSize(config.columns, config)
-config.height = calculateBoardSize(config.rows, config)
 
-canvas.height = config.height
-canvas.width = config.width
+canvas.width = config.width = calculateBoardSize(config.columns, config)
+canvas.height = config.height = calculateBoardSize(config.rows, config)
 
 function generateNewBoard(rows, columns, mineCountToGenerate){
     const cellCount = rows * columns
