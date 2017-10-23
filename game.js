@@ -2,13 +2,16 @@ function move(x,y, board){
     let cell = board[y][x]
     if(cell.flag || cell.shouldShow || cell.reveal) return board
     // lost game
-    if(cell.mine) showAll(board)
+    if(cell.mine){
+      cell.shouldShow = true
+      revealAll(board)
+    }
 
     // show nearby
     if(!cell.nearbyMines) showNearbyCells(x,y,board)
 
     // show this cell only
-    board[y][x].shouldShow = true
+    cell.shouldShow = true
     return board
 }
 
@@ -19,11 +22,11 @@ function showNearbyCells(x,y, board){
             boardCell.shouldShow = true
             showNearbyCells(nearbyCell.xCoordinate, nearbyCell.yCoordinate, board)
         }
-        boardCell.shouldShow = true 
+        boardCell.shouldShow = true
     });
 }
 
-function showAll(board){
+function revealAll(board){
     board.forEach(function(row){
         row.forEach(function(cell){
             cell.reveal = true

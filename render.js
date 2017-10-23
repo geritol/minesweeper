@@ -17,17 +17,18 @@ function render(board, {cellSize, separatorLineThickness, width, height}){
     // draw cells
     board.forEach(function(row, i) {
        row.forEach(function(cell, j){
-           if(cell.shouldShow || cell.reveal){
-                if(!cell.reveal) fillCell(j, i, '#f0f0f0', options)
+           if(cell.shouldShow){
+                fillCell(j, i, '#f0f0f0', options)
                 if(cell.mine){
-                    drawMine(j,i, options)
-                    return
-                }
-                if(cell.nearbyMines){
+                    drawMine(j,i, {...options, changeBackground: true})
+                }else if (cell.nearbyMines){
                     drawNumber(j,i, cell.nearbyMines, options)
-                    return
                 }
-           }else{
+           }else if(cell.reveal){
+             if(cell.mine){
+                 drawMine(j,i, options)
+             }
+           } else {
                 if(cell.flag){
                     drawFlag(j,i, options)
                     return
@@ -39,10 +40,10 @@ function render(board, {cellSize, separatorLineThickness, width, height}){
     });
 }
 
-function drawMine(x,y, {cellSize, separatorLineThickness}){
+function drawMine(x,y, {cellSize, separatorLineThickness, changeBackground}){
     let mineImage = document.getElementById('mine')
     let options = arguments[2]
-    fillCell(x,y, 'red', options)
+    if(changeBackground) fillCell(x,y, 'red', options)
     let [xPx, yPx] = coordinatesToPixel(x,y, options)
     context.drawImage(mineImage,xPx,yPx, cellSize, cellSize);
 }
