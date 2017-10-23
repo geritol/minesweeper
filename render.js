@@ -86,15 +86,3 @@ function drawNumber(x,y, num, {cellSize, separatorLineThickness}){
 
     context.fillText(num , xPx + cellSize/2 - (textWidth / 2), yPx + cellSize/6*5 );
 }
-
-function coordinatesToPixel(x,y, {cellSize, separatorLineThickness}){
-    let xPx = cellSize * x + separatorLineThickness * (x + 1)
-    let yPx = cellSize * y + separatorLineThickness * (y + 1)
-    return [xPx, yPx]
-}
-
-function pixelToCoordinates(xPx, yPx, {cellSize, separatorLineThickness}){
-    let x = Math.floor(xPx/(cellSize + separatorLineThickness))
-    let y = Math.floor(yPx/(cellSize + separatorLineThickness))
-    return [x,y]
-}
