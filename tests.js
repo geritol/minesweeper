@@ -1,4 +1,4 @@
-var showDetails = true
+var showDetails = false
 
 chai.should()
 var expect = chai.expect;
