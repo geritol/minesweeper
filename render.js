@@ -1,4 +1,5 @@
 function render(board, {cellSize, separatorLineThickness, width, height}){
+    context.clearRect(0, 0, canvas.width, canvas.height);
     let rows = board.length
     let columns = board[0].length
     let options = arguments[1]
@@ -17,6 +18,8 @@ function render(board, {cellSize, separatorLineThickness, width, height}){
     // draw cells
     board.forEach(function(row, i) {
        row.forEach(function(cell, j){
+           // base colour
+           fillCell(j, i, '#bdbdbd', options)
            if(cell.shouldShow){
                 fillCell(j, i, '#f0f0f0', options)
                 if(cell.mine){
@@ -28,12 +31,12 @@ function render(board, {cellSize, separatorLineThickness, width, height}){
              if(cell.mine){
                  drawMine(j,i, options)
              }
+             if(cell.flag){
+                 drawFlag(j,i, options)
+             }
            } else {
                 if(cell.flag){
                     drawFlag(j,i, options)
-                    return
-                }else{
-                    fillCell(j, i, '#bdbdbd', options)
                 }
            }
        })
