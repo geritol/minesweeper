@@ -1,4 +1,5 @@
 'use strict'
+
 /*
   Board: 2d Array containing cells
   Example:
