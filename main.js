@@ -4,8 +4,8 @@ const canvas = document.querySelector('canvas')
 const context = canvas.getContext('2d')
 
 const config = {
-  rows: 6,
-  columns: 6,
+  rows: 10,
+  columns: 20,
   cellSize: 30,
   mineCount: 30,
   separatorLineThickness: 2
