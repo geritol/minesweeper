@@ -32,7 +32,6 @@ function generateNewBoard(rowCount , columnCount, mineCountToGenerate){
 
   // calculate nearby mine counts
   // TODO: write and use calculateNearbyMines function
-
 }
 
 function generateMineCoordinates(columns, rows, mineCountToGenerate){
@@ -45,7 +44,6 @@ function generateMineCoordinates(columns, rows, mineCountToGenerate){
   // generate random coordinates until reach the necessary number of mines.
 
   // check if the new generated coordinate is unique
-
 }
 
 function calculateNearbyMines(rowIndex, columnIndex, board){
@@ -57,7 +55,6 @@ function calculateNearbyMines(rowIndex, columnIndex, board){
 
   // Use getNearbyCells helper function to get all the nearby cells
   // count the ones that have mines
-
 }
 
 function getNearbyCells(rowIndex, columnIndex, board){
@@ -66,7 +63,6 @@ function getNearbyCells(rowIndex, columnIndex, board){
     OUT: list of cells
     DESC: return cells that share an edge or a corner with the input cell
   */
-
 }
 
 function handleClick(event){
@@ -92,7 +88,6 @@ function handleRightClick(event){
     SIDEEFFECT: re-renders the board
   */
   // hint event.preventDefault() could be useful
-
 }
 
 function move(x, y, board){
@@ -102,7 +97,8 @@ function move(x, y, board){
     DESC: apply changes to the game state based on the clicked cells content
   */
 
-  // if the cell has a mine, the game is lost show this cell, reveal all cells
+  // if the cell has a mine, the game is lost
+  // show this cell, reveal all cells
 
   // if cells has no mines nearby, show nearby cells, use showNearbyCells function
 
@@ -117,5 +113,20 @@ function showNearbyCells(x, y, board){
   */
 
   // use getNearbyCells from helper
-
 }
+
+/*
+ * Fished?
+ * Congratulations!
+ * If you have some time left, you could try to implement the following features:
+ *  - give a possibility to choose from game types at the beginning (ex.: easy, medium, hard)
+ *  - show mines left
+ *  - show time spent in game
+ *  - give a possibility to start a new game
+ *
+ *  ... write a solver algorithm for it
+ *  http://web.mat.bham.ac.uk/R.W.Kaye/minesw/ordmsw.htm
+ *
+ * Hope you've enjoyed the meetup!
+ * We would appreciate your feedback.
+ */
