@@ -99,7 +99,7 @@ function calculateNearbyMines(rowIndex, columnIndex, board){
 function handleClick(event){
   /*
     IN: event left click
-    OUT:
+    OUT: void
     DESC: based on mouse click recalculate table and render it
   */
 
@@ -115,7 +115,7 @@ function handleClick(event){
 function handleRightClick(event){
   /*
     IN: event right click
-    OUT:
+    OUT: void
     DESC: based on mouse click recalculate table and render it and cell.flag
   */
   event.preventDefault()
@@ -156,7 +156,7 @@ function move(x,y, board){
 function showNearbyCells(x,y, board){
   /*
     IN: x (integer), y (integer), board (2d array)
-    OUT:
+    OUT: board or void
     DESC: recrusivley check nearby cells and show them if empty
   */
 
@@ -174,7 +174,7 @@ function showNearbyCells(x,y, board){
 function revealAll(board){
   /*
     IN:  board (2d array)
-    OUT:
+    OUT: board or void
     DESC: rset reveal all cell
   */
     board.forEach(function(row){
