@@ -68,7 +68,7 @@ function testCalculateNearbyMines(){
 // takes care of running the tests of test bundles
 function runTests(testName, testList){
   let res = {
-    message: `Test for ${testName}`,
+    message: `Tests for ${testName}`,
     passCount: 0,
     totalCount: 0
   }
