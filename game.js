@@ -1,3 +1,21 @@
+/*
+  Board: 2d Array containing cells
+  Example:
+  [
+  [{"nearbyMines":0},{"nearbyMines":1},{"nearbyMines":1}],
+  [{"nearbyMines":0},{"nearbyMines":2},{"mine":true}],
+  [{"nearbyMines":0},{"nearbyMines":2},{"mine":true}]
+  ]
+  ------------
+  Cell: object
+  Properties:
+    nearbyMines: Integer (0-8)
+    mine: Boolean
+    flag: Boolean
+    shouldShow: Boolean
+    reveal: Boolean
+ */
+
 function generateNewBoard(rows, columns, mineCountToGenerate){
     /*
       rowCount (integer), columnCount (integer), mineCountToGenerate (integer)
@@ -46,7 +64,7 @@ function generateMineCoordinates(columns, rows, mineCountToGenerate){
 }
 
 function calculateNearbyMines(rowIndex, columnIndex, board){
-    let cell = board[rowIndex][columnIndex]
+    const cell = board[rowIndex][columnIndex]
     if(cell.mine) return cell
 
     let nearbyMinesCount = 0
