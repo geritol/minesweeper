@@ -1,6 +1,7 @@
 'use strict'
 
 /*
+
   Board: 2d Array containing cells
   Example:
   [
@@ -118,7 +119,7 @@ function showNearbyCells(x, y, board){
 /*
  * Fished?
  * Congratulations!
- * If you have some time left, you could try to implement the following features:
+ * If you have some time left, you can still improve it further! Some tips:
  *  - give a possibility to choose from game types at the beginning (ex.: easy, medium, hard)
  *  - show mines left
  *  - show time spent in game
