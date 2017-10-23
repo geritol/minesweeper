@@ -28,7 +28,7 @@ function generateNewBoard(rows, columns, mineCountToGenerate){
     let board = range(rows).map(function(){return range(columns).map(function(){return {}})})
 
     // add mines to the board
-    // use generateMineCoordinates function
+    // TODO: write and use generateMineCoordinates function
     const mineCoordinates = generateMineCoordinates(rows, columns, mineCountToGenerate)
 
     mineCoordinates.forEach(function(coordinatePair){
@@ -37,7 +37,7 @@ function generateNewBoard(rows, columns, mineCountToGenerate){
     })
 
     // calculate nearby mine counts
-    // use calculateNearbyMines function
+    // TODO: write and use calculateNearbyMines function
     board.forEach(function(row, rowIndex){
         row.map(function(cell, columnsIndex){
             cell = calculateNearbyMines(rowIndex, columnsIndex, board)
@@ -60,11 +60,10 @@ function generateMineCoordinates(columns, rows, mineCountToGenerate){
   let mineCoordinatesIndex = {}
 
   // generate random coordinates until reach the necessary number of mines.
-
-  // check if the new generated coordinate is unique
   while(mineCoordinates.length < mineCountToGenerate){
       let x = Math.floor(Math.random() * columns)
       let y = Math.floor(Math.random() * rows)
+  // check if the new generated coordinate is unique
       if(!mineCoordinatesIndex[String([x,y])]){
           mineCoordinatesIndex[String([x,y])] = 1
           mineCoordinates.push([x,y])
@@ -76,18 +75,18 @@ function generateMineCoordinates(columns, rows, mineCountToGenerate){
 function calculateNearbyMines(rowIndex, columnIndex, board){
   /*
     IN: rowCount (integer), columnCount (integer), board (2d array)
-    OUT: cell (object) posiible value {"nearbyMines":0} or {"mine":true}
-    DESC: Crerates an object, that contains the information regarding one cell
+    OUT: cell (object) posible value {"nearbyMines":0..8} or {"mine":true}
+    DESC: Creates an object, that contains the information regarding one cell
   */
 
-  //Check if cell is not mine
     const cell = board[rowIndex][columnIndex]
     if(cell.mine) return cell
 
     let nearbyMinesCount = 0
 
 
-    //Use getNearbyCells helper function to get all the nearby cell
+    // Use getNearbyCells helper function to get all the nearby cells
+    // count the ones that have mines
     getNearbyCells(rowIndex, columnIndex, board).forEach(function(cell){
         if(cell.mine) nearbyMinesCount += 1
     })
@@ -100,14 +99,15 @@ function handleClick(event){
   /*
     IN: event left click
     OUT: void
-    DESC: based on mouse click recalculate table and render it
+    DESC: based on mouse click's place recalculate table and render it
+    SIDEEFFECT: re-renders the board
   */
 
   // use pixelToCoordinates helper to get the coordiante
   let [x,y] = pixelToCoordinates(event.offsetX, event.offsetY, config)
 
-  //use move to go throught the board
-  board = move(x,y, board)
+  //use the move function to evaluate the action
+  board = move(x, y, board)
   //render the board
   render(board, config)
 }
@@ -116,8 +116,10 @@ function handleRightClick(event){
   /*
     IN: event right click
     OUT: void
-    DESC: based on mouse click recalculate table and render it and cell.flag
+    DESC: based on the mouse click's place toggle cell.flag if necessary
+    SIDEEFFECT: re-renders the board
   */
+  // hint event.preventDefault() could be useful
   event.preventDefault()
   let [x,y] = pixelToCoordinates(event.offsetX, event.offsetY, config)
   let cell = board[y][x]
@@ -127,25 +129,24 @@ function handleRightClick(event){
   render(board, config)
 }
 
-function move(x,y, board){
+function move(x, y, board){
   /*
     IN: x (integer), y (integer), board (2d array)
     OUT: board (2d array), contains cells (object) {mine: Boolean, Integer}
-    DESC: recalculate board and show results of the event
+    DESC: apply changes to the game state based on the clicked cells content
   */
     let cell = board[y][x]
 
-    // no ations are needed
     if(cell.flag || cell.shouldShow || cell.reveal) return board
 
-    // lost game
+    // if the cell has a mine, the game is lost show this cell, reveal all cells
     if(cell.mine){
       cell.shouldShow = true
       revealAll(board)
       return board
     }
 
-    // show nearby use showNearbyCells
+    // if cells has no mines nearby, show nearby cells, use showNearbyCells function
     if(!cell.nearbyMines) showNearbyCells(x,y,board)
 
     // show this cell only
@@ -153,14 +154,14 @@ function move(x,y, board){
     return board
 }
 
-function showNearbyCells(x,y, board){
+function showNearbyCells(x, y, board){
   /*
     IN: x (integer), y (integer), board (2d array)
     OUT: board or void
     DESC: recrusivley check nearby cells and show them if empty
   */
 
-  //use getNearbyCells from helper
+  // use getNearbyCells from helper
     getNearbyCells(y,x,board).forEach(function(nearbyCell) {
         let boardCell = board[nearbyCell.yCoordinate][nearbyCell.xCoordinate]
         if(!nearbyCell.nearbyMines && !boardCell.shouldShow){
@@ -175,7 +176,7 @@ function revealAll(board){
   /*
     IN:  board (2d array)
     OUT: board or void
-    DESC: rset reveal all cell
+    DESC: reveal all cell, used when game is lost
   */
     board.forEach(function(row){
         row.forEach(function(cell){
