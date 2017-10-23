@@ -91,7 +91,6 @@ function range(lower, upper){
     return Array.apply(null, Array(upper + Math.abs(lower))).map(function (_, j) {return j + lower;});
 }
 let board = generateNewBoard(config.rows, config.columns, config.mineCount)
-console.log(board)
 
 canvas.addEventListener('click', function(event){
     let [x,y] = pixelToCoordinates(event.offsetX, event.offsetY, config)
