@@ -78,7 +78,7 @@ function runTests(testName, testList){
       fn()
       res.passCount += 1
     }catch(err){
-      if(showDetails) console.log(err)
+      if(showDetails) console.error(err)
     }
   })
   return res
